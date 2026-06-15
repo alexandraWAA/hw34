@@ -3,30 +3,30 @@ version: '3.8'
 services:
   db:
     image: postgres:15-alpine
-    container_name: lms_db
-    restart: always
+    container_name: habits_db
+    restart: unless-stopped
     environment:
-      POSTGRES_DB: ${DB_NAME:-lms_db}
-      POSTGRES_USER: ${DB_USER:-lms_user}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-lms_password}
+      POSTGRES_DB: ${DB_NAME:-habits_db}
+      POSTGRES_USER: ${DB_USER:-habits_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-habits_password}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-lms_user}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-habits_user}"]
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
-      - lms_network
+      - habits_network
     env_file:
       - .env
 
   redis:
     image: redis:7-alpine
-    container_name: lms_redis
-    restart: always
+    container_name: habits_redis
+    restart: unless-stopped
     command: redis-server --appendonly yes
     volumes:
       - redis_data:/data
@@ -38,15 +38,14 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - lms_network
+      - habits_network
 
   web:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: lms_web
-    restart: always
-    command: sh -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8000"
+    container_name: habits_web
+    restart: unless-stopped
     volumes:
       - .:/app
       - static_volume:/app/staticfiles
@@ -59,11 +58,13 @@ services:
       redis:
         condition: service_healthy
     environment:
-      DEBUG: 0
-      DB_HOST: db
-      REDIS_HOST: redis
+      - DEBUG=0
+      - DB_HOST=db
+      - DB_PORT=5432
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     networks:
-      - lms_network
+      - habits_network
     env_file:
       - .env
 
@@ -71,8 +72,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: lms_celery
-    restart: always
+    container_name: habits_celery
+    restart: unless-stopped
     command: celery -A config worker --loglevel=info
     volumes:
       - .:/app
@@ -82,10 +83,12 @@ services:
       redis:
         condition: service_healthy
     environment:
-      DB_HOST: db
-      REDIS_HOST: redis
+      - DB_HOST=db
+      - DB_PORT=5432
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     networks:
-      - lms_network
+      - habits_network
     env_file:
       - .env
 
@@ -93,8 +96,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: lms_celery_beat
-    restart: always
+    container_name: habits_celery_beat
+    restart: unless-stopped
     command: celery -A config beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     volumes:
       - .:/app
@@ -104,17 +107,19 @@ services:
       redis:
         condition: service_healthy
     environment:
-      DB_HOST: db
-      REDIS_HOST: redis
+      - DB_HOST=db
+      - DB_PORT=5432
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     networks:
-      - lms_network
+      - habits_network
     env_file:
       - .env
 
   nginx:
     image: nginx:1.25-alpine
-    container_name: lms_nginx
-    restart: always
+    container_name: habits_nginx
+    restart: unless-stopped
     volumes:
       - static_volume:/app/staticfiles
       - media_volume:/app/media
@@ -124,18 +129,18 @@ services:
     depends_on:
       - web
     networks:
-      - lms_network
+      - habits_network
 
 networks:
-  lms_network:
+  habits_network:
     driver: bridge
 
 volumes:
   postgres_data:
-    name: lms_postgres_data
+    name: habits_postgres_data
   redis_data:
-    name: lms_redis_data
+    name: habits_redis_data
   static_volume:
-    name: lms_static_volume
+    name: habits_static_volume
   media_volume:
-    name: lms_media_volume
+    name: habits_media_volume

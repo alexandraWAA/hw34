@@ -3,6 +3,10 @@
 .vscode/
 *.swp
 *.swo
+*.suo
+*.user
+*.sln
+.DS_Store
 
 # Python
 __pycache__/
@@ -61,7 +65,6 @@ celerybeat-schedule
 celerybeat.pid
 
 # OS
-.DS_Store
 Thumbs.db
 Desktop.ini
 

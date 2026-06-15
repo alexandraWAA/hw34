@@ -1,9 +1,18 @@
-# LMS System - Docker Installation
+# Трекер полезных привычек
 
-## Быстрый старт с Docker
+Бэкенд-часть SPA веб-приложения для трекинга полезных привычек.
 
-### 1. Клонирование репозитория
+## 🚀 Запуск с Docker
 
 ```bash
-git clone <url-репозитория>
-cd lms_project
+# Копирование переменных окружения
+cp .env.example .env
+
+# Запуск всех сервисов
+docker-compose up -d
+
+# Выполнение миграций
+docker-compose exec web python manage.py migrate
+
+# Создание суперпользователя
+docker-compose exec web python manage.py createsuperuser

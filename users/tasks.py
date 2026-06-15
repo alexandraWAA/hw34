@@ -10,7 +10,6 @@ logger = get_task_logger(__name__)
 
 @shared_task
 def deactivate_inactive_users():
-    """Деактивация пользователей, не заходивших более 30 дней"""
     thirty_days_ago = timezone.now() - timedelta(days=30)
     updated_count = User.objects.filter(
         last_login__lt=thirty_days_ago,
