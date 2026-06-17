@@ -1,19 +1,15 @@
-from rest_framework import viewsets, generics, permissions, status
-from rest_framework.response import Response
-from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema, extend_schema_view
-from lms.models import Course, Lesson, Subscription, Payment
-from lms.serializers import (
-    CourseSerializer,
-    CourseCreateUpdateSerializer,
-    LessonSerializer,
-    LessonCreateUpdateSerializer,
-    SubscriptionSerializer,
-    PaymentSerializer,
-)
+from rest_framework import generics, permissions, status, viewsets
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from lms.models import Course, Lesson, Payment, Subscription
 from lms.paginators import CoursePaginator, LessonPaginator
-from lms.services import sync_course_with_stripe, create_checkout_session
+from lms.serializers import (CourseCreateUpdateSerializer, CourseSerializer,
+                             LessonCreateUpdateSerializer, LessonSerializer,
+                             PaymentSerializer, SubscriptionSerializer)
+from lms.services import create_checkout_session, sync_course_with_stripe
 from lms.tasks import send_course_update_notification
 from users.permissions import IsModerator, IsOwner
 

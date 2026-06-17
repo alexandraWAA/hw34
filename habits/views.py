@@ -1,12 +1,10 @@
 from rest_framework import generics, permissions
+
 from habits.models import Habit
-from habits.serializers import (
-    HabitSerializer,
-    HabitCreateUpdateSerializer,
-    PublicHabitSerializer,
-)
-from habits.permissions import IsOwner
 from habits.pagination import HabitPagination
+from habits.permissions import IsOwner
+from habits.serializers import (HabitCreateUpdateSerializer, HabitSerializer,
+                                PublicHabitSerializer)
 
 
 class HabitListCreateView(generics.ListCreateAPIView):

@@ -1,8 +1,10 @@
 import logging
 from datetime import timedelta
-from django.utils import timezone
+
 from celery import shared_task
 from celery.utils.log import get_task_logger
+from django.utils import timezone
+
 from users.models import User
 
 logger = get_task_logger(__name__)

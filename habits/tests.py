@@ -1,8 +1,9 @@
-from rest_framework.test import APITestCase, APIClient
-from rest_framework import status
 from django.urls import reverse
-from users.models import User
+from rest_framework import status
+from rest_framework.test import APIClient, APITestCase
+
 from habits.models import Habit
+from users.models import User
 
 
 class HabitTests(APITestCase):

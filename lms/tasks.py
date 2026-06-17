@@ -1,14 +1,15 @@
 import logging
 from datetime import timedelta
-from django.core.mail import send_mail
-from django.conf import settings
-from django.utils import timezone
+
 from celery import shared_task
 from celery.utils.log import get_task_logger
+from django.conf import settings
+from django.core.mail import send_mail
+from django.utils import timezone
 
+from lms.models import Course, Subscription
 # Импорты моделей
 from users.models import User  # <-- ДОБАВЬТЕ ЭТУ СТРОКУ
-from lms.models import Course, Subscription
 
 logger = get_task_logger(__name__)
 

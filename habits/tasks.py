@@ -1,7 +1,9 @@
 import logging
 from datetime import datetime
+
 from celery import shared_task
 from celery.utils.log import get_task_logger
+
 from habits.models import Habit
 
 logger = get_task_logger(__name__)
