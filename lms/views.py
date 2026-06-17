@@ -5,14 +5,9 @@ from rest_framework.views import APIView
 
 from lms.models import Course, Lesson, Payment, Subscription
 from lms.paginators import CoursePaginator, LessonPaginator
-from lms.serializers import (
-    CourseCreateUpdateSerializer,
-    CourseSerializer,
-    LessonCreateUpdateSerializer,
-    LessonSerializer,
-    PaymentSerializer,
-    SubscriptionSerializer,
-)
+from lms.serializers import (CourseCreateUpdateSerializer, CourseSerializer,
+                             LessonCreateUpdateSerializer, LessonSerializer,
+                             PaymentSerializer, SubscriptionSerializer)
 from lms.services import create_checkout_session, sync_course_with_stripe
 from lms.tasks import send_course_update_notification
 from users.permissions import IsModerator, IsOwner
