@@ -5,8 +5,18 @@ from users.models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'email', 'first_name', 'last_name', 'phone', 'city', 'avatar', 'telegram_chat_id', 'date_joined']
-        read_only_fields = ['id', 'date_joined']
+        fields = [
+            "id",
+            "email",
+            "first_name",
+            "last_name",
+            "phone",
+            "city",
+            "avatar",
+            "telegram_chat_id",
+            "date_joined",
+        ]
+        read_only_fields = ["id", "date_joined"]
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
@@ -14,10 +24,20 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'password', 'first_name', 'last_name', 'phone', 'city', 'avatar', 'telegram_chat_id']
+        fields = [
+            "id",
+            "email",
+            "password",
+            "first_name",
+            "last_name",
+            "phone",
+            "city",
+            "avatar",
+            "telegram_chat_id",
+        ]
 
     def create(self, validated_data):
-        password = validated_data.pop('password')
+        password = validated_data.pop("password")
         user = User.objects.create_user(**validated_data)
         user.set_password(password)
         user.save()
@@ -27,4 +47,11 @@ class UserCreateSerializer(serializers.ModelSerializer):
 class UserProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'phone', 'city', 'avatar', 'telegram_chat_id']
+        fields = [
+            "first_name",
+            "last_name",
+            "phone",
+            "city",
+            "avatar",
+            "telegram_chat_id",
+        ]

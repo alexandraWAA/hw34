@@ -6,7 +6,7 @@ from habits.validators import (
     validate_related_habit_is_pleasant,
     validate_pleasant_habit_no_reward_or_related,
     validate_execution_time,
-    validate_periodicity
+    validate_periodicity,
 )
 
 
@@ -14,39 +14,41 @@ class Habit(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='habits',
-        verbose_name='Пользователь'
+        related_name="habits",
+        verbose_name="Пользователь",
     )
-    place = models.CharField(max_length=200, verbose_name='Место')
-    time = models.TimeField(verbose_name='Время')
-    action = models.CharField(max_length=200, verbose_name='Действие')
-    is_pleasant = models.BooleanField(default=False, verbose_name='Приятная привычка')
+    place = models.CharField(max_length=200, verbose_name="Место")
+    time = models.TimeField(verbose_name="Время")
+    action = models.CharField(max_length=200, verbose_name="Действие")
+    is_pleasant = models.BooleanField(default=False, verbose_name="Приятная привычка")
     related_habit = models.ForeignKey(
-        'self',
+        "self",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='related_to',
-        verbose_name='Связанная привычка'
+        related_name="related_to",
+        verbose_name="Связанная привычка",
     )
     periodicity = models.PositiveSmallIntegerField(
         default=1,
         validators=[MinValueValidator(1), MaxValueValidator(7)],
-        verbose_name='Периодичность (дни)'
+        verbose_name="Периодичность (дни)",
     )
-    reward = models.CharField(max_length=200, blank=True, null=True, verbose_name='Вознаграждение')
+    reward = models.CharField(
+        max_length=200, blank=True, null=True, verbose_name="Вознаграждение"
+    )
     execution_time = models.PositiveSmallIntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(120)],
-        verbose_name='Время на выполнение (секунды)'
+        verbose_name="Время на выполнение (секунды)",
     )
-    is_public = models.BooleanField(default=False, verbose_name='Публичная привычка')
+    is_public = models.BooleanField(default=False, verbose_name="Публичная привычка")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = 'Привычка'
-        verbose_name_plural = 'Привычки'
-        ordering = ['-created_at']
+        verbose_name = "Привычка"
+        verbose_name_plural = "Привычки"
+        ordering = ["-created_at"]
 
     def __str__(self):
         return f"{self.user.email}: {self.action} в {self.time}"
