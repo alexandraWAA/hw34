@@ -6,8 +6,8 @@ from django.utils import timezone
 from celery import shared_task
 from celery.utils.log import get_task_logger
 
-# Добавляем импорт модели User
-from users.models import User
+# Импорты моделей
+from users.models import User  # <-- ДОБАВЬТЕ ЭТУ СТРОКУ
 from lms.models import Course, Subscription
 
 logger = get_task_logger(__name__)
