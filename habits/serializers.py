@@ -35,9 +35,14 @@ class HabitCreateUpdateSerializer(serializers.ModelSerializer):
 
 
 class PublicHabitSerializer(serializers.ModelSerializer):
+    """Сериализатор для публичных привычек (только чтение)"""
     user_email = serializers.CharField(source='user.email', read_only=True)
 
     class Meta:
         model = Habit
-        fields = ['id', 'user_email', 'place', 'time', 'action', 'periodicity', 'execution_time', 'created_at']
-        read_only_fields = '__all__'
+        fields = [
+            'id', 'user_email', 'place', 'time', 'action',
+            'periodicity', 'execution_time', 'created_at'
+        ]
+        # ИСПРАВЛЕНО: список вместо строки '__all__'
+        read_only_fields = ['id', 'user_email', 'place', 'time', 'action', 'periodicity', 'execution_time', 'created_at']

@@ -120,3 +120,5 @@ jobs:
       run: |
         curl -f http://$SERVER_IP/api/docs/ || exit 1
         echo "✅ Deployment successful!"
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true

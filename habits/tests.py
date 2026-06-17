@@ -7,7 +7,10 @@ from habits.models import Habit
 
 class HabitTests(APITestCase):
     def setUp(self):
-        self.user = User.objects.create_user(email='test@test.com', password='testpass123')
+        self.user = User.objects.create_user(
+            email='test@test.com',
+            password='testpass123'
+        )
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
 
@@ -40,7 +43,12 @@ class HabitTests(APITestCase):
         self.assertEqual(response.data['count'], 1)
 
     def test_public_habits_list(self):
-        Habit.objects.create(user=self.user, is_public=True, **self.habit_data)
+        # Создаем публичную привычку
+        Habit.objects.create(
+            user=self.user,
+            is_public=True,
+            **self.habit_data
+        )
         url = reverse('public-habits')
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
