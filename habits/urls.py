@@ -1,10 +1,7 @@
 from django.urls import path
 
-from habits.views import (
-    HabitListCreateView,
-    HabitRetrieveUpdateDeleteView,
-    PublicHabitListView,
-)
+from habits.views import (HabitListCreateView, HabitRetrieveUpdateDeleteView,
+                          PublicHabitListView)
 
 urlpatterns = [
     path("", HabitListCreateView.as_view(), name="habit-list-create"),
