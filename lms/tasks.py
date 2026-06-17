@@ -8,6 +8,7 @@ from django.core.mail import send_mail
 from django.utils import timezone
 
 from lms.models import Course, Subscription
+
 # Импорты моделей
 from users.models import User  # <-- ДОБАВЬТЕ ЭТУ СТРОКУ
 
