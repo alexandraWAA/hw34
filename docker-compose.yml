@@ -41,6 +41,7 @@ services:
       - habits_network
 
   web:
+    image: ${DOCKER_USERNAME}/habits-tracker:latest
     build:
       context: .
       dockerfile: Dockerfile

@@ -1,0 +1,19 @@
+[Unit]
+Description=Gunicorn daemon for Habits Tracker
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/habits-tracker
+EnvironmentFile=/var/www/habits-tracker/.env
+ExecStart=/var/www/habits-tracker/venv/bin/gunicorn --config /var/www/habits-tracker/deploy/gunicorn.conf config.wsgi:application
+ExecReload=/bin/kill -s HUP $MAINPID
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=gunicorn-habits
+
+[Install]
+WantedBy=multi-user.target

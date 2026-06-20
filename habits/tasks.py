@@ -1,7 +1,9 @@
-import logging
+# habits/tasks.py
 from datetime import datetime
+
 from celery import shared_task
 from celery.utils.log import get_task_logger
+
 from habits.models import Habit
 
 logger = get_task_logger(__name__)
@@ -10,13 +12,14 @@ logger = get_task_logger(__name__)
 @shared_task
 def send_habit_notifications():
     from habits.services import send_telegram_notification
+
     now = datetime.now()
     current_time = now.time()
 
     habits = Habit.objects.filter(
         time__gte=current_time,
         time__lte=current_time,
-        user__telegram_chat_id__isnull=False
+        user__telegram_chat_id__isnull=False,
     )
 
     for habit in habits:
@@ -29,9 +32,9 @@ def send_telegram_notification(habit_id):
     from django.conf import settings
 
     try:
-        habit = Habit.objects.select_related('user').get(pk=habit_id)
+        habit = Habit.objects.select_related("user").get(pk=habit_id)
     except Habit.DoesNotExist:
-        logger.error('Привычка %d не найдена', habit_id)
+        logger.error("Привычка %d не найдена", habit_id)
         return
 
     chat_id = habit.user.telegram_chat_id
@@ -52,11 +55,11 @@ def send_telegram_notification(habit_id):
         message += f"\n🔗 Связанная привычка: {habit.related_habit.action}"
 
     url = f"{settings.TELEGRAM_BOT_URL}{settings.TELEGRAM_BOT_TOKEN}/sendMessage"
-    data = {'chat_id': chat_id, 'text': message, 'parse_mode': 'HTML'}
+    data = {"chat_id": chat_id, "text": message, "parse_mode": "HTML"}
 
     try:
         response = requests.post(url, data=data, timeout=10)
         if response.status_code == 200:
-            logger.info('Уведомление отправлено пользователю %s', habit.user.email)
+            logger.info("Уведомление отправлено пользователю %s", habit.user.email)
     except Exception as e:
-        logger.error('Ошибка при отправке запроса: %s', e)
+        logger.error("Ошибка при отправке запроса: %s", e)
